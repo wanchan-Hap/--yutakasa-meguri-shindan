@@ -1,227 +1,302 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>豊かさの巡り診断</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
-      background: linear-gradient(180deg, #fff7e6 0%, #f6efe4 45%, #eaf4ee 100%);
-      color: #4b3b2f;
-      line-height: 1.7;
-    }
-    .wrap {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 28px 18px 60px;
-    }
-    .card {
-      background: rgba(255,255,255,0.9);
-      border-radius: 24px;
-      padding: 26px;
-      box-shadow: 0 10px 30px rgba(91, 70, 45, 0.12);
-      border: 1px solid rgba(190,160,100,.25);
-    }
-    h1 {
-      text-align: center;
-      font-size: 30px;
-      margin: 10px 0 8px;
-      color: #8a6128;
-      letter-spacing: .06em;
-    }
-    .sub {
-      text-align: center;
-      color: #6f5a47;
-      margin-bottom: 24px;
-    }
-    .question {
-      margin: 22px 0;
-      padding: 18px;
-      background: #fffaf0;
-      border-radius: 18px;
-      border-left: 6px solid #d7a94d;
-    }
-    .question h3 {
-      margin: 0 0 12px;
-      font-size: 17px;
-    }
-    label {
-      display: block;
-      padding: 10px 12px;
-      margin: 8px 0;
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #eadfcf;
-      cursor: pointer;
-    }
-    input[type="radio"] {
-      margin-right: 8px;
-    }
-    button {
-      display: block;
-      width: 100%;
-      margin: 28px auto 8px;
-      padding: 15px 20px;
-      border: none;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #c8942d, #e8c36b);
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      box-shadow: 0 8px 18px rgba(168,120,40,.25);
-    }
-    button.secondary {
-      background: #8da894;
-      margin-top: 12px;
-    }
-    #result {
-      display: none;
-      margin-top: 26px;
-      background: #ffffff;
-      border-radius: 22px;
-      padding: 24px;
-      border: 2px solid #e7c878;
-    }
-    .type {
-      font-size: 24px;
-      color: #8a6128;
-      text-align: center;
-      font-weight: bold;
-      margin: 12px 0;
-    }
-    .catch {
-      text-align: center;
-      font-weight: bold;
-      color: #6d7f52;
-      font-size: 18px;
-    }
-    .small {
-      font-size: 13px;
-      text-align: center;
-      color: #8a7a6b;
-      margin-top: 20px;
-    }
-    .badge {
-      text-align:center;
-      font-size: 42px;
-      margin: 5px 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>豊かさの巡り診断</title>
+
+<style>
+body{
+  margin:0;
+  font-family:"Hiragino Sans","Yu Gothic",sans-serif;
+  background:linear-gradient(180deg,#fff8eb,#f6f0e6,#edf6ef);
+  color:#4d3c2d;
+}
+
+.screen{
+  display:none;
+  min-height:100vh;
+  padding:30px 20px;
+  box-sizing:border-box;
+  justify-content:center;
+  align-items:center;
+}
+
+.screen.active{
+  display:flex;
+}
+
+.card{
+  width:100%;
+  max-width:700px;
+  background:rgba(255,255,255,.92);
+  border-radius:28px;
+  padding:32px 24px;
+  box-sizing:border-box;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+h1{
+  text-align:center;
+  color:#9a6b28;
+  font-size:34px;
+  margin-bottom:16px;
+}
+
+.sub{
+  text-align:center;
+  line-height:1.8;
+  color:#6b5c4c;
+  margin-bottom:30px;
+}
+
+.question-title{
+  font-size:24px;
+  margin-bottom:22px;
+  color:#8b6125;
+}
+
+label{
+  display:block;
+  margin:12px 0;
+  padding:16px;
+  background:#fffaf2;
+  border-radius:16px;
+  border:1px solid #eadfce;
+  cursor:pointer;
+  line-height:1.6;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  margin-top:24px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(90deg,#c8942d,#e8c56b);
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+}
+
+button.secondary{
+  background:#8ea798;
+}
+
+.result-type{
+  text-align:center;
+  font-size:28px;
+  color:#8a6128;
+  font-weight:bold;
+  margin:12px 0;
+}
+
+.result-catch{
+  text-align:center;
+  font-size:18px;
+  color:#6d7f52;
+  font-weight:bold;
+  margin-bottom:22px;
+}
+
+.emoji{
+  text-align:center;
+  font-size:56px;
+}
+
+.small{
+  text-align:center;
+  margin-top:26px;
+  font-size:13px;
+  color:#89796c;
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>豊かさの巡り診断</h1>
-      <p class="sub">今のあなたの「受け取る・流す・育てる」バランスを見てみましょう。</p>
 
-      <form id="quiz">
-        <div class="question">
-          <h3>Q1. 今のお金や豊かさの感覚に近いものは？</h3>
-          <label><input type="radio" name="q1" value="earth"> 安心してコツコツ育てたい</label>
-          <label><input type="radio" name="q1" value="water"> 流れに乗って自然に巡らせたい</label>
-          <label><input type="radio" name="q1" value="fire"> 行動して大きく広げたい</label>
-          <label><input type="radio" name="q1" value="wind"> アイデアやご縁から広げたい</label>
-        </div>
+<!-- タイトル -->
+<div class="screen active" id="title-screen">
+  <div class="card">
+    <h1>豊かさの巡り診断</h1>
+    <p class="sub">
+      今のあなたの<br>
+      「受け取る・流す・育てる」エネルギーバランスを診断します✨
+    </p>
 
-        <div class="question">
-          <h3>Q2. 滞りを感じる時、起こりやすいことは？</h3>
-          <label><input type="radio" name="q2" value="earth"> 不安で守りに入りすぎる</label>
-          <label><input type="radio" name="q2" value="water"> 気持ちに流されて決めきれない</label>
-          <label><input type="radio" name="q2" value="fire"> 焦って動きすぎて疲れる</label>
-          <label><input type="radio" name="q2" value="wind"> 考えすぎて形になりにくい</label>
-        </div>
+    <button onclick="nextScreen(1)">診断スタート</button>
 
-        <div class="question">
-          <h3>Q3. あなたが豊かさを感じる瞬間は？</h3>
-          <label><input type="radio" name="q3" value="earth"> 暮らしや土台が整った時</label>
-          <label><input type="radio" name="q3" value="water"> 心が満たされ、人とつながれた時</label>
-          <label><input type="radio" name="q3" value="fire"> 挑戦して成果が出た時</label>
-          <label><input type="radio" name="q3" value="wind"> 新しい可能性が見えた時</label>
-        </div>
-
-        <div class="question">
-          <h3>Q4. 今いちばん必要そうなことは？</h3>
-          <label><input type="radio" name="q4" value="earth"> 足元を整える</label>
-          <label><input type="radio" name="q4" value="water"> 心をゆるめる</label>
-          <label><input type="radio" name="q4" value="fire"> 小さく動き出す</label>
-          <label><input type="radio" name="q4" value="wind"> 情報やご縁を整理する</label>
-        </div>
-
-        <button type="button" onclick="showResult()">診断する</button>
-      </form>
-
-      <div id="result">
-        <div class="badge" id="emoji"></div>
-        <div class="type" id="type"></div>
-        <p class="catch" id="catch"></p>
-        <p id="message"></p>
-        <p><strong>巡りを整えるワンポイント：</strong><span id="advice"></span></p>
-        <button class="secondary" onclick="location.reload()">もう一度診断する</button>
-      </div>
-
-      <p class="small">結和 -yuiwa- ／ 豊かさの巡り診断</p>
-    </div>
+    <p class="small">結和 -yuiwa-</p>
   </div>
+</div>
 
-  <script>
-    const results = {
-      earth: {
-        emoji: "🌱",
-        type: "地タイプ：安心を育てる人",
-        catch: "豊かさは、足元を整えるほど自然に育ちます。",
-        message: "あなたは、暮らし・身体・お金・環境などの土台が整うことで力を発揮するタイプ。焦って大きく動くより、まずは安心できる器をつくることで巡りが戻ってきます。",
-        advice: "財布や作業場、家の一角など「豊かさの入口」をひとつ整えてみましょう。"
-      },
-      water: {
-        emoji: "💧",
-        type: "水タイプ：受け取り上手な人",
-        catch: "心がゆるむほど、豊かさは流れ込みます。",
-        message: "あなたは、人とのつながりや感情の満ち足りた感覚から豊かさを受け取るタイプ。がんばりすぎるより、心がほっとする選択を増やすことで巡りがよくなります。",
-        advice: "今日うれしかったことを3つ書き出して、受け取れている豊かさに気づいてみましょう。"
-      },
-      fire: {
-        emoji: "🔥",
-        type: "火タイプ：流れを動かす人",
-        catch: "小さな行動が、豊かさの巡りを燃やします。",
-        message: "あなたは、情熱や行動力で現実を動かしていくタイプ。今は完璧を待つより、小さく試すことが巡りを生みます。燃え尽きないペースづくりも大切です。",
-        advice: "気になっていることを1つだけ、今日10分だけ進めてみましょう。"
-      },
-      wind: {
-        emoji: "🪽",
-        type: "風タイプ：ご縁とひらめきの人",
-        catch: "軽やかな発信が、豊かさの入口を開きます。",
-        message: "あなたは、アイデア・言葉・ご縁から豊かさが広がるタイプ。頭の中にあるものを外へ出すことで、必要な人や流れとつながりやすくなります。",
-        advice: "今思っていることを短い文章やメモにして、誰かに伝える・投稿する準備をしてみましょう。"
-      }
-    };
+<!-- Q1 -->
+<div class="screen" id="screen1">
+  <div class="card">
+    <div class="question-title">Q1. 今のお金や豊かさの感覚に近いものは？</div>
 
-    function showResult() {
-      const form = document.getElementById("quiz");
-      const data = new FormData(form);
-      const scores = { earth: 0, water: 0, fire: 0, wind: 0 };
+    <label><input type="radio" name="q1" value="earth"> 安心してコツコツ育てたい</label>
+    <label><input type="radio" name="q1" value="water"> 流れに乗って自然に巡らせたい</label>
+    <label><input type="radio" name="q1" value="fire"> 行動して大きく広げたい</label>
+    <label><input type="radio" name="q1" value="wind"> アイデアやご縁から広げたい</label>
 
-      for (let i = 1; i <= 4; i++) {
-        const v = data.get("q" + i);
-        if (!v) {
-          alert("すべての質問に答えてね。");
-          return;
-        }
-        scores[v]++;
-      }
+    <button onclick="saveAndNext(1)">次へ</button>
+  </div>
+</div>
 
-      const top = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
-      const r = results[top];
+<!-- Q2 -->
+<div class="screen" id="screen2">
+  <div class="card">
+    <div class="question-title">Q2. 滞りを感じる時、起こりやすいことは？</div>
 
-      document.getElementById("emoji").textContent = r.emoji;
-      document.getElementById("type").textContent = r.type;
-      document.getElementById("catch").textContent = r.catch;
-      document.getElementById("message").textContent = r.message;
-      document.getElementById("advice").textContent = r.advice;
-      document.getElementById("result").style.display = "block";
-      document.getElementById("result").scrollIntoView({ behavior: "smooth" });
-    }
-  </script>
+    <label><input type="radio" name="q2" value="earth"> 不安で守りに入りすぎる</label>
+    <label><input type="radio" name="q2" value="water"> 気持ちに流されて決めきれない</label>
+    <label><input type="radio" name="q2" value="fire"> 焦って動きすぎて疲れる</label>
+    <label><input type="radio" name="q2" value="wind"> 考えすぎて形になりにくい</label>
+
+    <button onclick="saveAndNext(2)">次へ</button>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="screen" id="screen3">
+  <div class="card">
+    <div class="question-title">Q3. あなたが豊かさを感じる瞬間は？</div>
+
+    <label><input type="radio" name="q3" value="earth"> 暮らしや土台が整った時</label>
+    <label><input type="radio" name="q3" value="water"> 心が満たされ、人とつながれた時</label>
+    <label><input type="radio" name="q3" value="fire"> 挑戦して成果が出た時</label>
+    <label><input type="radio" name="q3" value="wind"> 新しい可能性が見えた時</label>
+
+    <button onclick="saveAndNext(3)">次へ</button>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="screen" id="screen4">
+  <div class="card">
+    <div class="question-title">Q4. 今いちばん必要そうなことは？</div>
+
+    <label><input type="radio" name="q4" value="earth"> 足元を整える</label>
+    <label><input type="radio" name="q4" value="water"> 心をゆるめる</label>
+    <label><input type="radio" name="q4" value="fire"> 小さく動き出す</label>
+    <label><input type="radio" name="q4" value="wind"> 情報やご縁を整理する</label>
+
+    <button onclick="showResult()">結果を見る</button>
+  </div>
+</div>
+
+<!-- 結果 -->
+<div class="screen" id="result-screen">
+  <div class="card">
+    <div class="emoji" id="emoji"></div>
+    <div class="result-type" id="type"></div>
+    <div class="result-catch" id="catch"></div>
+
+    <p id="message"></p>
+
+    <p><strong>巡りを整えるワンポイント：</strong><span id="advice"></span></p>
+
+    <button class="secondary" onclick="location.reload()">もう一度診断する</button>
+  </div>
+</div>
+
+<script>
+
+const answers = {};
+
+const results = {
+  earth:{
+    emoji:"🌱",
+    type:"地タイプ",
+    catch:"安心を整えるほど、豊かさは育つ",
+    message:"あなたは『土台』を整えることで豊かさが巡るタイプ。安心感や暮らしの安定が整うほど、本来の力を発揮できます。",
+    advice:"財布や部屋など、まずは身近な『豊かさの入口』を整えてみましょう。"
+  },
+
+  water:{
+    emoji:"💧",
+    type:"水タイプ",
+    catch:"心がゆるむほど、巡りは流れ出す",
+    message:"あなたは感情や人とのつながりから豊かさを受け取るタイプ。頑張りすぎるより、安心できる時間を増やすことが大切です。",
+    advice:"『嬉しかったこと』を3つ書き出して、受け取れている豊かさに気づいてみましょう。"
+  },
+
+  fire:{
+    emoji:"🔥",
+    type:"火タイプ",
+    catch:"小さな行動が、流れを動かす",
+    message:"あなたは情熱と行動力で豊かさを生み出すタイプ。完璧を待つより、小さくでも動き始めることが巡りにつながります。",
+    advice:"今気になっていることを、今日10分だけ進めてみましょう。"
+  },
+
+  wind:{
+    emoji:"🪽",
+    type:"風タイプ",
+    catch:"ひらめきと発信が、ご縁を呼ぶ",
+    message:"あなたはアイデアや言葉、ご縁から豊かさが広がるタイプ。頭の中のものを外へ出すことで流れが加速します。",
+    advice:"思いついたことをメモやSNSに書き出してみましょう。"
+  }
+};
+
+function nextScreen(num){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen"+num).classList.add("active");
+}
+
+function saveAndNext(num){
+
+  const selected = document.querySelector('input[name="q'+num+'"]:checked');
+
+  if(!selected){
+    alert("どれか選んでね✨");
+    return;
+  }
+
+  answers["q"+num] = selected.value;
+
+  nextScreen(num+1);
+}
+
+function showResult(){
+
+  const selected = document.querySelector('input[name="q4"]:checked');
+
+  if(!selected){
+    alert("どれか選んでね✨");
+    return;
+  }
+
+  answers.q4 = selected.value;
+
+  const scores = {
+    earth:0,
+    water:0,
+    fire:0,
+    wind:0
+  };
+
+  Object.values(answers).forEach(v=>{
+    scores[v]++;
+  });
+
+  const top = Object.keys(scores).reduce((a,b)=>
+    scores[a] >= scores[b] ? a : b
+  );
+
+  const r = results[top];
+
+  document.getElementById("emoji").textContent = r.emoji;
+  document.getElementById("type").textContent = r.type;
+  document.getElementById("catch").textContent = r.catch;
+  document.getElementById("message").textContent = r.message;
+  document.getElementById("advice").textContent = r.advice;
+
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("result-screen").classList.add("active");
+}
+
+</script>
+
 </body>
 </html>
